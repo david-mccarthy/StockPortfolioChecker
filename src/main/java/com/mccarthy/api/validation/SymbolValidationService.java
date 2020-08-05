@@ -8,6 +8,8 @@ import com.mccarthy.api.model.Portfolio;
 import com.mccarthy.api.model.Symbol;
 import com.mccarthy.api.service.dao.DataAccess;
 import com.mccarthy.api.service.external.PriceChecker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ import java.util.List;
  */
 @Service
 public class SymbolValidationService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SymbolValidationService.class);
     protected DataAccess dataAccess;
     protected PriceChecker priceChecker;
 
@@ -44,6 +47,7 @@ public class SymbolValidationService {
         }
 
         if (!duplicateSymbols.isEmpty()) {
+            LOGGER.debug("Duplicate symbols found trying to add new symbols to portfolio.");
             throw new DuplicateSymbolValidationException("Duplicate symbols found in portfolio " + portfolioId, duplicateSymbols);
         }
     }
@@ -58,6 +62,7 @@ public class SymbolValidationService {
         Portfolio portfolio = dataAccess.getPortfolio(portfolioId);
         List<Symbol> symbols = portfolio.getSymbols();
         if ((symbols == null || symbols.isEmpty()) || !containsSymbol(portfolio, symbolToFind)) {
+            LOGGER.debug("Symbol does not exist in portfolio.");
             throw new SymbolException("Symbol " + symbolToFind + " does not exist in portfolio " + portfolioId);
         }
     }
@@ -76,6 +81,7 @@ public class SymbolValidationService {
         }
 
         if (!errors.isEmpty()) {
+            LOGGER.debug("Symbols being added to portfolio are not valid in the supplier.");
             throw new InvalidSymbolException("Provided symbols are not valid against the supplier.", errors);
         }
     }

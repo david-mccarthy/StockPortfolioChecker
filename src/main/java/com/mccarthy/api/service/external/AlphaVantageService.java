@@ -28,6 +28,7 @@ public class AlphaVantageService implements PriceChecker {
      */
     @Override
     public BigDecimal getPrice(String symbol) {
+        LOGGER.info("Getting price for symbol " + symbol + " from supplier.");
         String url = getUrl(symbol);
 
         RestTemplate restTemplate = new RestTemplate();
@@ -50,6 +51,7 @@ public class AlphaVantageService implements PriceChecker {
      */
     @Override
     public boolean isValidSymbol(String symbol) {
+        LOGGER.info("Checking if symbol " + symbol + " is valid against our supplier.");
         String url = getUrl(symbol);
 
         RestTemplate restTemplate = new RestTemplate();

@@ -3,6 +3,8 @@ package com.mccarthy.api.service.dao;
 import com.mccarthy.api.error.exceptions.NoPortfolioException;
 import com.mccarthy.api.model.Portfolio;
 import com.mccarthy.api.model.Symbol;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -14,6 +16,7 @@ import java.util.List;
  */
 @Repository
 public class DataAccessH2 implements DataAccess {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DataAccessH2.class);
     private final JdbcTemplate jdbcTemplate;
 
     public DataAccessH2(JdbcTemplate jdbcTemplate) {
@@ -25,6 +28,7 @@ public class DataAccessH2 implements DataAccess {
      */
     @Override
     public Portfolio getPortfolio(String id) {
+        LOGGER.info("Retrieving portfolio with id " + id + " from cache.");
         Portfolio portfolio = getPortfolioDetails(id);
         portfolio.setSymbols(getSymbols(id));
 
@@ -36,6 +40,7 @@ public class DataAccessH2 implements DataAccess {
      */
     @Override
     public void savePortfolio(Portfolio portfolio) {
+        LOGGER.info("Saving portfolio to cache");
         savePortfolioDetails(portfolio.getId());
         List<Symbol> symbols = portfolio.getSymbols();
         if (symbols != null) {
@@ -48,6 +53,7 @@ public class DataAccessH2 implements DataAccess {
      */
     @Override
     public void deletePortfolio(String id) {
+        LOGGER.info("Deleting portfolio with id " + id);
         deleteSymbolDetails(id);
         deletePortfolioDetails(id);
     }
@@ -57,6 +63,7 @@ public class DataAccessH2 implements DataAccess {
      */
     @Override
     public void deleteSymbol(String portfolioId, String symbol) {
+        LOGGER.info("Deleting symbol " + symbol + " from portfolio with id " + portfolioId);
         String query = String.format("DELETE FROM SYMBOLS WHERE PORTFOLIO = '%s' AND SYMBOL = '%s';", portfolioId, symbol);
         jdbcTemplate.execute(query);
     }
@@ -66,6 +73,7 @@ public class DataAccessH2 implements DataAccess {
      */
     @Override
     public boolean hasPortfolio(String id) {
+        LOGGER.info("Checking does a portfolio with id " + id + " exist.");
         String query = String.format("SELECT * FROM PORTFOLIOS WHERE ID  = '%s'", id);
         List<Portfolio> result = jdbcTemplate.query(query, new BeanPropertyRowMapper<>(Portfolio.class));
 
