@@ -7,7 +7,7 @@ import com.mccarthy.api.model.Portfolio;
  * Any implementation of this interface will provide the required functionality for a given data store, e.g. redis, mysql...
  * NoSQL solution, such as redis would be preferable.
  */
-public interface DataAccess {
+public interface DataAccessService {
 
     /**
      * Retrieve a portfolio identified by the given id.

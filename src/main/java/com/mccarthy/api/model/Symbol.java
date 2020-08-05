@@ -6,7 +6,7 @@ import java.math.BigDecimal;
  * Symbol model.
  */
 public class Symbol {
-    private String symbol;
+    private String name;
     private BigDecimal price;
     private int volume;
     private BigDecimal totalValue;
@@ -27,12 +27,12 @@ public class Symbol {
         this.volume = volume;
     }
 
-    public String getSymbol() {
-        return symbol;
+    public String getName() {
+        return name;
     }
 
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public BigDecimal getPrice() {

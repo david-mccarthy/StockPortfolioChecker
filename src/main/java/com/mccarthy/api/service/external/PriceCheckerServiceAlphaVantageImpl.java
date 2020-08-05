@@ -15,11 +15,11 @@ import java.math.BigDecimal;
  * Service to connect to the AlphaVantage REST api for stock price information.
  */
 @Service
-public class AlphaVantageService implements PriceChecker {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AlphaVantageService.class);
+public class PriceCheckerServiceAlphaVantageImpl implements PriceCheckerService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PriceCheckerServiceAlphaVantageImpl.class);
     protected final ConfigService configService;
 
-    public AlphaVantageService(ConfigService configService) {
+    public PriceCheckerServiceAlphaVantageImpl(ConfigService configService) {
         this.configService = configService;
     }
 
@@ -58,11 +58,8 @@ public class AlphaVantageService implements PriceChecker {
         ResponseEntity<AlphaVantageResponse> response = restTemplate.getForEntity(url, AlphaVantageResponse.class);
 
         AlphaVantageResponse body = response.getBody();
-        if (body == null || body.getGlobalQuote() == null || body.getGlobalQuote().getSymbol() == null || "".equals(body.getGlobalQuote().getSymbol())) {
-            return false;
-        }
-
-        return true;
+        return body != null && body.getGlobalQuote() != null && body.getGlobalQuote().getSymbol() != null
+                && !"".equals(body.getGlobalQuote().getSymbol());
     }
 
     /**

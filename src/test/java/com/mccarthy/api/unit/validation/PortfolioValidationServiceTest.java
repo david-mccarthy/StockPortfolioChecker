@@ -1,7 +1,7 @@
 package com.mccarthy.api.unit.validation;
 
 import com.mccarthy.api.error.exceptions.NoPortfolioException;
-import com.mccarthy.api.service.dao.DataAccess;
+import com.mccarthy.api.service.dao.DataAccessService;
 import com.mccarthy.api.validation.PortfolioValidationService;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class PortfolioValidationServiceTest {
     @Mock
-    protected DataAccess dataAccessService;
+    protected DataAccessService dataAccessService;
     protected PortfolioValidationService portfolioValidationService;
 
     @Before
@@ -35,7 +35,7 @@ public class PortfolioValidationServiceTest {
             exceptionThrown = true;
         }
 
-        assertFalse(exceptionThrown);
+        assertFalse("Exception should not have been thrown.", exceptionThrown);
     }
 
     @Test
@@ -48,6 +48,6 @@ public class PortfolioValidationServiceTest {
             exceptionThrown = true;
         }
 
-        assertTrue(exceptionThrown);
+        assertTrue("Exception should have been thrown.", exceptionThrown);
     }
 }

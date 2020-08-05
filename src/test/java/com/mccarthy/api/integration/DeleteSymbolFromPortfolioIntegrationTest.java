@@ -30,7 +30,7 @@ public class DeleteSymbolFromPortfolioIntegrationTest extends IntegrationTestBas
         String id = portfolio.getBody().getId();
         addItemToPortfolio(SYMBOL, id);
         ResponseEntity<Void> voidResponseEntity = sendRequest("/portfolio/newId/symbol/" + SYMBOL, HttpMethod.DELETE, null, Void.class);
-        assertEquals("", HttpStatus.NOT_FOUND, voidResponseEntity.getStatusCode());
+        assertEquals("Response should be NOT FOUND", HttpStatus.NOT_FOUND, voidResponseEntity.getStatusCode());
     }
 
     @Test
@@ -39,6 +39,6 @@ public class DeleteSymbolFromPortfolioIntegrationTest extends IntegrationTestBas
         String id = portfolio.getBody().getId();
         addItemToPortfolio(SYMBOL, id);
         ResponseEntity<Void> voidResponseEntity = sendRequest("/portfolio/newId/symbol/TSLA", HttpMethod.DELETE, null, Void.class);
-        assertEquals("", HttpStatus.NOT_FOUND, voidResponseEntity.getStatusCode());
+        assertEquals("Response should be NOT FOUND", HttpStatus.NOT_FOUND, voidResponseEntity.getStatusCode());
     }
 }

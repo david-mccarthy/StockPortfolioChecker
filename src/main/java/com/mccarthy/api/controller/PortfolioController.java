@@ -2,7 +2,7 @@ package com.mccarthy.api.controller;
 
 import com.mccarthy.api.model.AddItemInput;
 import com.mccarthy.api.model.Portfolio;
-import com.mccarthy.api.service.dao.DataAccess;
+import com.mccarthy.api.service.dao.DataAccessService;
 import com.mccarthy.api.service.portfolio.CreatePortfolioService;
 import com.mccarthy.api.service.portfolio.DeletePortfolioService;
 import com.mccarthy.api.service.portfolio.GetPortfolioService;
@@ -14,17 +14,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class PortfolioController {
     @Autowired
-    protected DataAccess dataAccess;
-
+    protected DataAccessService dataAccessService;
     @Autowired
     protected CreatePortfolioService createPortfolioService;
-
     @Autowired
     protected UpdatePortfolioService updatePortfolioService;
-
     @Autowired
     protected DeletePortfolioService deletePortfolioService;
-
     @Autowired
     protected GetPortfolioService getPortfolioService;
 

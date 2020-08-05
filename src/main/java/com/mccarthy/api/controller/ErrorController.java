@@ -1,5 +1,7 @@
-package com.mccarthy.api.error;
+package com.mccarthy.api.controller;
 
+import com.mccarthy.api.error.ErrorCodes;
+import com.mccarthy.api.error.ErrorService;
 import com.mccarthy.api.error.exceptions.*;
 import com.mccarthy.api.model.ApiError;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,8 +2,8 @@ package com.mccarthy.api.service.portfolio;
 
 import com.mccarthy.api.model.Portfolio;
 import com.mccarthy.api.model.Symbol;
-import com.mccarthy.api.service.dao.DataAccess;
-import com.mccarthy.api.service.external.PriceChecker;
+import com.mccarthy.api.service.dao.DataAccessService;
+import com.mccarthy.api.service.external.PriceCheckerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -18,12 +18,12 @@ import java.math.BigDecimal;
 @Service
 public class GetPortfolioService {
     private static final Logger LOGGER = LoggerFactory.getLogger(GetPortfolioService.class);
-    protected DataAccess dataAccess;
-    protected final PriceChecker priceChecker;
+    protected DataAccessService dataAccessService;
+    protected final PriceCheckerService priceCheckerService;
 
-    public GetPortfolioService(DataAccess dataAccess, PriceChecker priceChecker) {
-        this.dataAccess = dataAccess;
-        this.priceChecker = priceChecker;
+    public GetPortfolioService(DataAccessService dataAccessService, PriceCheckerService priceCheckerService) {
+        this.dataAccessService = dataAccessService;
+        this.priceCheckerService = priceCheckerService;
     }
 
     /**
@@ -34,11 +34,11 @@ public class GetPortfolioService {
      */
     public ResponseEntity<Portfolio> getPortfolio(String id) {
         LOGGER.info("Retrieving portfolio with id " + id);
-        Portfolio portfolio = dataAccess.getPortfolio(id);
+        Portfolio portfolio = dataAccessService.getPortfolio(id);
         BigDecimal totalValue = BigDecimal.ZERO;
         for (Symbol price : portfolio.getSymbols()) {
-            String symbol = price.getSymbol();
-            BigDecimal currentPrice = priceChecker.getPrice(symbol);
+            String symbol = price.getName();
+            BigDecimal currentPrice = priceCheckerService.getPrice(symbol);
             price.setPrice(currentPrice);
 
             long volume = price.getVolume();

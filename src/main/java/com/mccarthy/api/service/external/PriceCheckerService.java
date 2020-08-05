@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 /**
  * Interface defining the operations of a price checker service.
  */
-public interface PriceChecker {
+public interface PriceCheckerService {
 
     /**
      * Get the price associated with the given symbol.

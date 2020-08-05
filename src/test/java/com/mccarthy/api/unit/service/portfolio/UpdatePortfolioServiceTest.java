@@ -2,7 +2,7 @@ package com.mccarthy.api.unit.service.portfolio;
 
 import com.mccarthy.api.model.AddItemInput;
 import com.mccarthy.api.model.Portfolio;
-import com.mccarthy.api.service.dao.DataAccess;
+import com.mccarthy.api.service.dao.DataAccessService;
 import com.mccarthy.api.service.portfolio.UpdatePortfolioService;
 import com.mccarthy.api.validation.SymbolValidationService;
 import org.junit.Before;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 public class UpdatePortfolioServiceTest {
     private Portfolio portfolio;
     @Mock
-    protected DataAccess dataAccessService;
+    protected DataAccessService dataAccessService;
     @Mock
     protected SymbolValidationService symbolValidationService;
 

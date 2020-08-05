@@ -1,7 +1,7 @@
 package com.mccarthy.api.service.portfolio;
 
 import com.mccarthy.api.model.Portfolio;
-import com.mccarthy.api.service.dao.DataAccess;
+import com.mccarthy.api.service.dao.DataAccessService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -16,10 +16,10 @@ import java.util.UUID;
 @Service
 public class CreatePortfolioService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CreatePortfolioService.class);
-    protected final DataAccess dataAccess;
+    protected final DataAccessService dataAccessService;
 
-    public CreatePortfolioService(DataAccess dataAccess) {
-        this.dataAccess = dataAccess;
+    public CreatePortfolioService(DataAccessService dataAccessService) {
+        this.dataAccessService = dataAccessService;
     }
 
     /**
@@ -31,7 +31,7 @@ public class CreatePortfolioService {
         LOGGER.info("Creating portfolio");
         Portfolio portfolio = new Portfolio();
         portfolio.setId(UUID.randomUUID().toString());
-        dataAccess.savePortfolio(portfolio);
+        dataAccessService.savePortfolio(portfolio);
 
         return new ResponseEntity<>(portfolio, HttpStatus.CREATED);
     }

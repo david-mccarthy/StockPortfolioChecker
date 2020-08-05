@@ -1,7 +1,7 @@
 package com.mccarthy.api.unit.service.portfolio;
 
 import com.mccarthy.api.model.Portfolio;
-import com.mccarthy.api.service.dao.DataAccess;
+import com.mccarthy.api.service.dao.DataAccessService;
 import com.mccarthy.api.service.portfolio.CreatePortfolioService;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +11,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -19,7 +18,7 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class CreatePortfolioServiceTest {
     @Mock
-    protected DataAccess dataAccessService;
+    protected DataAccessService dataAccessService;
     protected CreatePortfolioService createPortfolioService;
 
     @Before

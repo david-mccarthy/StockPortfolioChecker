@@ -1,6 +1,6 @@
 package com.mccarthy.api.service.portfolio;
 
-import com.mccarthy.api.service.dao.DataAccess;
+import com.mccarthy.api.service.dao.DataAccessService;
 import com.mccarthy.api.validation.PortfolioValidationService;
 import com.mccarthy.api.validation.SymbolValidationService;
 import org.slf4j.Logger;
@@ -15,13 +15,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class DeletePortfolioService {
     private static final Logger LOGGER = LoggerFactory.getLogger(DeletePortfolioService.class);
-    protected final DataAccess dataAccess;
+    protected final DataAccessService dataAccessService;
     protected final PortfolioValidationService portfolioValidationService;
     protected final SymbolValidationService symbolValidationService;
 
-    public DeletePortfolioService(DataAccess dataAccess, PortfolioValidationService portfolioValidationService,
+    public DeletePortfolioService(DataAccessService dataAccessService, PortfolioValidationService portfolioValidationService,
                                   SymbolValidationService symbolValidationService) {
-        this.dataAccess = dataAccess;
+        this.dataAccessService = dataAccessService;
         this.portfolioValidationService = portfolioValidationService;
         this.symbolValidationService = symbolValidationService;
     }
@@ -35,7 +35,7 @@ public class DeletePortfolioService {
     public ResponseEntity<Void> deletePortfolio(String portfolioId) {
         LOGGER.info("Deleting portfolio with id " + portfolioId);
         portfolioValidationService.validatePortfolioExists(portfolioId);
-        dataAccess.deletePortfolio(portfolioId);
+        dataAccessService.deletePortfolio(portfolioId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -51,7 +51,7 @@ public class DeletePortfolioService {
         LOGGER.info("Deleting symbol " + symbol + " from portfolio with id " + portfolioId);
         portfolioValidationService.validatePortfolioExists(portfolioId);
         symbolValidationService.validatePortfolioContainsSymbol(portfolioId, symbol);
-        dataAccess.deleteSymbol(portfolioId, symbol);
+        dataAccessService.deleteSymbol(portfolioId, symbol);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

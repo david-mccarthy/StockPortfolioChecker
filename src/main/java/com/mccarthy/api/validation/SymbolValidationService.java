@@ -6,8 +6,8 @@ import com.mccarthy.api.error.exceptions.SymbolException;
 import com.mccarthy.api.model.AddItemInput;
 import com.mccarthy.api.model.Portfolio;
 import com.mccarthy.api.model.Symbol;
-import com.mccarthy.api.service.dao.DataAccess;
-import com.mccarthy.api.service.external.PriceChecker;
+import com.mccarthy.api.service.dao.DataAccessService;
+import com.mccarthy.api.service.external.PriceCheckerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -21,12 +21,12 @@ import java.util.List;
 @Service
 public class SymbolValidationService {
     private static final Logger LOGGER = LoggerFactory.getLogger(SymbolValidationService.class);
-    protected DataAccess dataAccess;
-    protected PriceChecker priceChecker;
+    protected DataAccessService dataAccessService;
+    protected PriceCheckerService priceCheckerService;
 
-    public SymbolValidationService(DataAccess dataAccess, PriceChecker priceChecker) {
-        this.dataAccess = dataAccess;
-        this.priceChecker = priceChecker;
+    public SymbolValidationService(DataAccessService dataAccessService, PriceCheckerService priceCheckerService) {
+        this.dataAccessService = dataAccessService;
+        this.priceCheckerService = priceCheckerService;
     }
 
     /**
@@ -36,7 +36,7 @@ public class SymbolValidationService {
      * @param input       Input containing the new symbols to add.
      */
     public void validatePortfolioDoesNotContainNewSymbols(String portfolioId, AddItemInput input) {
-        Portfolio portfolio = dataAccess.getPortfolio(portfolioId);
+        Portfolio portfolio = dataAccessService.getPortfolio(portfolioId);
         List<String> duplicateSymbols = new ArrayList<>();
 
         for (AddItemInput.SymbolInput symbolInput : input.getSymbols()) {
@@ -59,7 +59,7 @@ public class SymbolValidationService {
      * @param symbolToFind Symbol to look for.
      */
     public void validatePortfolioContainsSymbol(String portfolioId, String symbolToFind) {
-        Portfolio portfolio = dataAccess.getPortfolio(portfolioId);
+        Portfolio portfolio = dataAccessService.getPortfolio(portfolioId);
         List<Symbol> symbols = portfolio.getSymbols();
         if ((symbols == null || symbols.isEmpty()) || !containsSymbol(portfolio, symbolToFind)) {
             LOGGER.debug("Symbol does not exist in portfolio.");
@@ -75,7 +75,7 @@ public class SymbolValidationService {
     public void validateSymbolExistsInExternalSystem(AddItemInput input) {
         List<String> errors = new ArrayList<>();
         for (AddItemInput.SymbolInput symbol : input.getSymbols()) {
-            if (!priceChecker.isValidSymbol(symbol.getName())) {
+            if (!priceCheckerService.isValidSymbol(symbol.getName())) {
                 errors.add(symbol.getName());
             }
         }
@@ -95,7 +95,7 @@ public class SymbolValidationService {
      */
     protected boolean containsSymbol(Portfolio portfolio, String symbolToFind) {
         for (Symbol symbol : portfolio.getSymbols()) {
-            if (symbolToFind.equals(symbol.getSymbol())) {
+            if (symbolToFind.equals(symbol.getName())) {
                 return true;
             }
         }

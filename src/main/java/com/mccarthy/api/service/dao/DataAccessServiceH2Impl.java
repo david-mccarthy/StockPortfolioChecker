@@ -15,11 +15,18 @@ import java.util.List;
  * H2 in memory db implementation of the data access interface.
  */
 @Repository
-public class DataAccessH2 implements DataAccess {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DataAccessH2.class);
+public class DataAccessServiceH2Impl implements DataAccessService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DataAccessServiceH2Impl.class);
+    private static final String DELETE_SYMBOL_QUERY = "DELETE FROM SYMBOLS WHERE PORTFOLIO = '%s' AND NAME = '%s';";
+    private static final String SELECT_PORTFOLIO_QUERY = "SELECT * FROM PORTFOLIOS WHERE ID = '%s'";
+    private static final String DELETE_SYMBOLS_QUERY = "DELETE FROM SYMBOLS WHERE PORTFOLIO = '%s';";
+    private static final String DELETE_PORTFOLIO_QUERY = "DELETE FROM PORTFOLIOS WHERE ID = '%s';";
+    private static final String SELECT_SYMBOLS_QUERY = "SELECT * FROM SYMBOLS where portfolio ='%s';";
+    private static final String MERGE_PORTFOLIO_QUERY = "MERGE INTO PORTFOLIOS (id) values ( ? );";
+    private static final String MERGE_SYMBOLS_QUERY = "MERGE INTO SYMBOLS (portfolio, name, volume) VALUES (?, ?, ?);";
     private final JdbcTemplate jdbcTemplate;
 
-    public DataAccessH2(JdbcTemplate jdbcTemplate) {
+    public DataAccessServiceH2Impl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -64,7 +71,7 @@ public class DataAccessH2 implements DataAccess {
     @Override
     public void deleteSymbol(String portfolioId, String symbol) {
         LOGGER.info("Deleting symbol " + symbol + " from portfolio with id " + portfolioId);
-        String query = String.format("DELETE FROM SYMBOLS WHERE PORTFOLIO = '%s' AND SYMBOL = '%s';", portfolioId, symbol);
+        String query = String.format(DELETE_SYMBOL_QUERY, portfolioId, symbol);
         jdbcTemplate.execute(query);
     }
 
@@ -74,7 +81,7 @@ public class DataAccessH2 implements DataAccess {
     @Override
     public boolean hasPortfolio(String id) {
         LOGGER.info("Checking does a portfolio with id " + id + " exist.");
-        String query = String.format("SELECT * FROM PORTFOLIOS WHERE ID  = '%s'", id);
+        String query = String.format(SELECT_PORTFOLIO_QUERY, id);
         List<Portfolio> result = jdbcTemplate.query(query, new BeanPropertyRowMapper<>(Portfolio.class));
 
         return !result.isEmpty();
@@ -86,7 +93,7 @@ public class DataAccessH2 implements DataAccess {
      * @param id Id of the portfolio to remove.
      */
     protected void deleteSymbolDetails(String id) {
-        String query = String.format("DELETE FROM SYMBOLS WHERE PORTFOLIO = '%s';", id);
+        String query = String.format(DELETE_SYMBOLS_QUERY, id);
         jdbcTemplate.execute(query);
     }
 
@@ -96,7 +103,7 @@ public class DataAccessH2 implements DataAccess {
      * @param id Id of the portfolio to remove.
      */
     protected void deletePortfolioDetails(String id) {
-        String query = String.format("DELETE FROM PORTFOLIOS WHERE ID = '%s';", id);
+        String query = String.format(DELETE_PORTFOLIO_QUERY, id);
         jdbcTemplate.execute(query);
     }
 
@@ -107,14 +114,14 @@ public class DataAccessH2 implements DataAccess {
      * @return Portfolio.
      */
     protected Portfolio getPortfolioDetails(String id) {
-        String request = String.format("SELECT * FROM PORTFOLIOS where id = '%s';", id);
+        String query = String.format(DataAccessServiceH2Impl.SELECT_PORTFOLIO_QUERY, id);
 
-        List<Portfolio> query = jdbcTemplate.query(request, new BeanPropertyRowMapper<>(Portfolio.class));
-        if (query.isEmpty()) {
+        List<Portfolio> result = jdbcTemplate.query(query, new BeanPropertyRowMapper<>(Portfolio.class));
+        if (result.isEmpty()) {
             throw new NoPortfolioException("Could not retrieve portfolio with id" + id);
         }
 
-        return query.get(0);
+        return result.get(0);
     }
 
     /**
@@ -124,7 +131,7 @@ public class DataAccessH2 implements DataAccess {
      * @return List of symbols associated with this portfolio.
      */
     protected List<Symbol> getSymbols(String id) {
-        String query = String.format("SELECT * FROM SYMBOLS where portfolio ='%s';", id);
+        String query = String.format(SELECT_SYMBOLS_QUERY, id);
         return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(Symbol.class));
     }
 
@@ -134,8 +141,7 @@ public class DataAccessH2 implements DataAccess {
      * @param portfolioId Portfolio id.
      */
     protected void savePortfolioDetails(String portfolioId) {
-        String query = "MERGE INTO PORTFOLIOS (id) values ( ? );";
-        jdbcTemplate.update(query, portfolioId);
+        jdbcTemplate.update(MERGE_PORTFOLIO_QUERY, portfolioId);
     }
 
     /**
@@ -145,9 +151,8 @@ public class DataAccessH2 implements DataAccess {
      * @param symbols     List of symbols.
      */
     protected void saveSymbolDetails(String portfolioId, List<Symbol> symbols) {
-        String query = "MERGE INTO SYMBOLS (portfolio, symbol, volume) VALUES (?, ?, ?);";
         for (Symbol symbol : symbols) {
-            jdbcTemplate.update(query, portfolioId, symbol.getSymbol(), symbol.getVolume());
+            jdbcTemplate.update(MERGE_SYMBOLS_QUERY, portfolioId, symbol.getName(), symbol.getVolume());
         }
     }
 }
