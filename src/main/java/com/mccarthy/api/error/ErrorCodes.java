@@ -1,5 +1,9 @@
 package com.mccarthy.api.error;
 
+
+/**
+ * Class of static error codes.
+ */
 public final class ErrorCodes {
     public static final String PORTFOLIO_NOT_FOUND = "001";
     public static final String EXTERNAL_SERVICE_ERROR = "002";

@@ -3,20 +3,26 @@ package com.mccarthy.api.integration;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.mccarthy.api.model.AddItemInput;
 import com.mccarthy.api.model.Portfolio;
+import org.junit.Ignore;
 import org.junit.Rule;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 
+@RunWith(SpringRunner.class)
+@Ignore
 public class IntegrationTestBase {
+
     @Autowired
-    protected TestRestTemplate restTemplate;
+    TestRestTemplate restTemplate;
 
     @Rule
     public WireMockRule wiremock = new WireMockRule(options()

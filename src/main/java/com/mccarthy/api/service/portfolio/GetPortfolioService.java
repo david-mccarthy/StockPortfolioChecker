@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
+/**
+ * Service to retrieve a portfolio from the cache.
+ */
 @Service
 public class GetPortfolioService {
     protected DataAccess dataAccess;
@@ -20,6 +23,12 @@ public class GetPortfolioService {
         this.priceChecker = priceChecker;
     }
 
+    /**
+     * Retrieve the portfolio identified by the given id.
+     *
+     * @param id Id of the portfolio to retrieve.
+     * @return Portfolio.
+     */
     public ResponseEntity<Portfolio> getPortfolio(String id) {
         Portfolio portfolio = dataAccess.getPortfolio(id);
         BigDecimal totalValue = BigDecimal.ZERO;

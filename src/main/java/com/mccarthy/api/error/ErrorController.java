@@ -1,9 +1,6 @@
 package com.mccarthy.api.error;
 
-import com.mccarthy.api.error.exceptions.DuplicateSymbolValidationException;
-import com.mccarthy.api.error.exceptions.ExternalServiceException;
-import com.mccarthy.api.error.exceptions.NoPortfolioException;
-import com.mccarthy.api.error.exceptions.SymbolException;
+import com.mccarthy.api.error.exceptions.*;
 import com.mccarthy.api.model.ApiError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +11,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.List;
 
+/**
+ * Controller to handle exceptions raised within the application.
+ */
 @ControllerAdvice
 public class ErrorController extends ResponseEntityExceptionHandler {
     @Autowired
@@ -51,6 +51,14 @@ public class ErrorController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(SymbolException.class)
     public ResponseEntity<ApiError> handleSymbolValidationErrors(SymbolException ex) {
         ApiError apiError = errorService.createApiError(ex, ErrorCodes.SYMBOL_VALIDATION_ERROR, "Validation error found with symbols.");
+
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidSymbolException.class)
+    public ResponseEntity<ApiError> handleSymbolValidationErrors(InvalidSymbolException ex) {
+        List<String> symbols = ex.getSymbols();
+        ApiError apiError = errorService.createApiError(ex, ErrorCodes.SYMBOL_VALIDATION_ERROR, "Invalid symbols in request: " + symbols);
 
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }

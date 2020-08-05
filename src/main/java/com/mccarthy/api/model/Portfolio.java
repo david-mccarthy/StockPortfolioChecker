@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Model of a portfolio.
+ */
 public class Portfolio {
     protected String id;
     protected List<Symbol> symbols;

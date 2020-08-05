@@ -1,5 +1,8 @@
 package com.mccarthy.api.model;
 
+/**
+ * Model for representing errors in the output of the application.
+ */
 public class ApiError {
     private String errorCode;
     private String errorMessage;

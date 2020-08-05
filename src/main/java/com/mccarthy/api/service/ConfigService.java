@@ -3,6 +3,10 @@ package com.mccarthy.api.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+/**
+ * Configuration service.
+ * Currently takes values from application.properties, but could also take properties from an external source, e.g. Spring cloud config.
+ */
 @Service
 public class ConfigService {
     @Value("${alphavantage.apikey}")

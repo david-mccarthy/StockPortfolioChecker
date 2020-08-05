@@ -2,6 +2,9 @@ package com.mccarthy.api.error.exceptions;
 
 import java.util.List;
 
+/**
+ * Exception to be thrown when trying to add a symbol to a portfolio, where it already exists.
+ */
 public class DuplicateSymbolValidationException extends RuntimeException {
     public List<String> getSymbols() {
         return symbols;
@@ -17,6 +20,4 @@ public class DuplicateSymbolValidationException extends RuntimeException {
         super(message);
         this.symbols = symbols;
     }
-
-
 }

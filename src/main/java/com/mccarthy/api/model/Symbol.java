@@ -2,6 +2,9 @@ package com.mccarthy.api.model;
 
 import java.math.BigDecimal;
 
+/**
+ * Symbol model.
+ */
 public class Symbol {
     private String symbol;
     private BigDecimal price;

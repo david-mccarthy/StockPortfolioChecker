@@ -2,6 +2,9 @@ package com.mccarthy.api.model;
 
 import java.util.List;
 
+/**
+ * Input model for adding symbols to a portfolio.
+ */
 public class AddItemInput {
     private List<SymbolInput> symbols;
 
@@ -13,6 +16,9 @@ public class AddItemInput {
         this.symbols = symbols;
     }
 
+    /**
+     * Symbol information to add to a portfolio.
+     */
     public static class SymbolInput {
         private String name;
         private int volume;

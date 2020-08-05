@@ -11,6 +11,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 
+/**
+ * Service to connect to the AlphaVantage REST api for stock price information.
+ */
 @Service
 public class AlphaVantageService implements PriceChecker {
     private static final Logger LOGGER = LoggerFactory.getLogger(AlphaVantageService.class);
@@ -20,6 +23,9 @@ public class AlphaVantageService implements PriceChecker {
         this.configService = configService;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BigDecimal getPrice(String symbol) {
         String url = getUrl(symbol);
@@ -35,9 +41,34 @@ public class AlphaVantageService implements PriceChecker {
             LOGGER.debug("Could not get the price for symbol " + symbol + " from external service");
             throw new ExternalServiceException("Could not get a price for symbol " + symbol);
         }
+
         return new BigDecimal(price);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isValidSymbol(String symbol) {
+        String url = getUrl(symbol);
+
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<AlphaVantageResponse> response = restTemplate.getForEntity(url, AlphaVantageResponse.class);
+
+        AlphaVantageResponse body = response.getBody();
+        if (body == null || body.getGlobalQuote() == null || body.getGlobalQuote().getSymbol() == null || "".equals(body.getGlobalQuote().getSymbol())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Build the url for our service call.
+     *
+     * @param symbol Symbol to include in the url/
+     * @return URL.
+     */
     protected String getUrl(String symbol) {
         String alphaVantageUrl = configService.getAlphaVantageUrl();
         String alphaVantageApiKey = configService.getAlphaVantageApiKey();

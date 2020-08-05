@@ -2,7 +2,6 @@ package com.mccarthy.api.integration;
 
 import com.mccarthy.api.model.AddItemInput;
 import com.mccarthy.api.model.Portfolio;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
@@ -15,22 +14,19 @@ import static org.junit.Assert.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AddItemToPortfolioIntegrationTest extends IntegrationTestBase {
-    private String id;
-
-    @Before
-    public void setup() {
-        ResponseEntity<Portfolio> portfolio = createPortfolio();
-        id = portfolio.getBody().getId();
-    }
 
     @Test
     public void testAddSingleItem() {
+        ResponseEntity<Portfolio> portfolio = createPortfolio();
+        String id = portfolio.getBody().getId();
         ResponseEntity<Void> response = addItemToPortfolio("AAPL", id);
         assertEquals("Expected status code OK.", HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
     public void testAddMultipleItems() {
+        ResponseEntity<Portfolio> portfolio = createPortfolio();
+        String id = portfolio.getBody().getId();
         AddItemInput input = new AddItemInput();
         ArrayList<AddItemInput.SymbolInput> symbols = new ArrayList<>();
         AddItemInput.SymbolInput apple = new AddItemInput.SymbolInput();
@@ -50,6 +46,8 @@ public class AddItemToPortfolioIntegrationTest extends IntegrationTestBase {
 
     @Test
     public void testAddInvalidItem() {
+        ResponseEntity<Portfolio> portfolio = createPortfolio();
+        String id = portfolio.getBody().getId();
         ResponseEntity<Void> response = addItemToPortfolio("XYZABC", id);
         assertEquals("Expected status code BAD REQUEST.", HttpStatus.BAD_REQUEST, response.getStatusCode());
     }

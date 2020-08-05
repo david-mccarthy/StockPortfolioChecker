@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service for deleting a portfolio, or its symbols.
+ */
 @Service
 public class DeletePortfolioService {
     private static final Logger LOGGER = LoggerFactory.getLogger(DeletePortfolioService.class);
@@ -23,6 +26,12 @@ public class DeletePortfolioService {
         this.symbolValidationService = symbolValidationService;
     }
 
+    /**
+     * Delete the portfolio identified by the given id.
+     *
+     * @param portfolioId Id of the portfolio we want to remove.
+     * @return A void response entity.
+     */
     public ResponseEntity<Void> deletePortfolio(String portfolioId) {
         LOGGER.info("Deleting portfolio with id " + portfolioId);
         portfolioValidationService.validatePortfolioExists(portfolioId);
@@ -31,6 +40,13 @@ public class DeletePortfolioService {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * Delete a given symbol from the portfolio identified by the given id.
+     *
+     * @param portfolioId Id of the portfolio.
+     * @param symbol      Symbol to remove.
+     * @return A void response entity.
+     */
     public ResponseEntity<Void> deleteSymbol(String portfolioId, String symbol) {
         LOGGER.info("Deleting symbol " + symbol + " from portfolio with id " + portfolioId);
         portfolioValidationService.validatePortfolioExists(portfolioId);

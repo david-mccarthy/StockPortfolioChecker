@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 /**
- * Create a portfolio.
+ * Service to create a portfolio.
  */
 @Service
 public class CreatePortfolioService {
@@ -19,6 +19,11 @@ public class CreatePortfolioService {
         this.dataAccess = dataAccess;
     }
 
+    /**
+     * Create a portfolio.
+     *
+     * @return An empty portfolio.
+     */
     public ResponseEntity<Portfolio> createPortfolio() {
         Portfolio portfolio = new Portfolio();
         portfolio.setId(UUID.randomUUID().toString());

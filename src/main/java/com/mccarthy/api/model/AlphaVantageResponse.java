@@ -2,6 +2,13 @@ package com.mccarthy.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Model to hold information returned by the AlphaVantage service.
+ * This service did not provide it's own model so I am maintaining one here.
+ * This is not ideal, as a change to their model breaks the API.
+ *
+ * We would not be going live against an API we do not have an agreement in place, or a versioned API which should not break without warning.
+ */
 public class AlphaVantageResponse {
     @JsonProperty("Global Quote")
     protected GlobalQuote globalQuote;

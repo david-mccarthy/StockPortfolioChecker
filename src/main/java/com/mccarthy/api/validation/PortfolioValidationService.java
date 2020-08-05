@@ -6,6 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service to validate parts of a portfolio.
+ */
 @Service
 public class PortfolioValidationService {
     private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioValidationService.class);
@@ -15,6 +18,11 @@ public class PortfolioValidationService {
         this.dataAccess = dataAccess;
     }
 
+    /**
+     * Validate that a portfolio with the given id exists.
+     *
+     * @param portfolioId Id of the portfolio.
+     */
     public void validatePortfolioExists(String portfolioId) {
         if (!dataAccess.hasPortfolio(portfolioId)) {
             LOGGER.debug("Portfolio with id " + portfolioId + " does not exist.");
