@@ -30,18 +30,18 @@ GET: http://localhost:8080/portfolio/{portfolioId}
 POST: http://localhost:8080/portfolio/{portfolioId}
 Request body:
 
-    {
-    	"symbols":[
-    		{
-	    		"name": "AAPL",
-    			"volume":100
-    		},
-    		{
-	    		"name": "TSLA",
-    			"volume":25
-    		}
-    	]
-    }
+{
+   "symbols":[
+      {
+         "name":"AAPL",
+         "volume":100
+      },
+      {
+         "name":"TSLA",
+         "volume":25
+      }
+   ]
+}
 **Delete a symbol from your portfolio:**
 DELETE: http://localhost:8080/portfolio/{portfolioId}/symbol/{symbol}
 
