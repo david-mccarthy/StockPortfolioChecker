@@ -1,6 +1,6 @@
 
 # Stock portfolio checker
-REST API to build a stock portfolio and check it's value.
+Spring boot REST API to build a stock portfolio and check it's value.
 
 ## Usage
 **Important!**
