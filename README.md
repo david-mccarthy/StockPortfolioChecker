@@ -1,6 +1,7 @@
 
+
 # Stock portfolio checker
-REST API to build a stock portfolio and check it's value.
+Spring boot REST API to build a stock portfolio and check it's value.
 
 ## Usage
 **Important!**
@@ -31,17 +32,18 @@ POST: http://localhost:8080/portfolio/{portfolioId}
 Request body:
 
     {
-    	"symbols":[
-    		{
-	    		"name": "AAPL",
-    			"volume":100
-    		},
-    		{
-	    		"name": "TSLA",
-    			"volume":25
-    		}
-    	]
+       "symbols":[
+          {
+             "name":"AAPL",
+             "volume":100
+          },
+          {
+             "name":"TSLA",
+             "volume":25
+          }
+       ]
     }
+
 **Delete a symbol from your portfolio:**
 DELETE: http://localhost:8080/portfolio/{portfolioId}/symbol/{symbol}
 
@@ -56,7 +58,9 @@ To run the tests, use the gradle wrapper from the project root:
 
 Tests consist of:
  - Integration tests
+ 
   Spring integration tests using wiremock to stub  the responses from the external service. 
   - Unit tests: 
+  
   Junit tests using mockito to stub dependency method calls
 
