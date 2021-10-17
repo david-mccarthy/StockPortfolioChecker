@@ -1,5 +1,5 @@
 
-
+ 
 # Stock portfolio checker
 Spring boot REST API to build a stock portfolio and check it's value.
 
