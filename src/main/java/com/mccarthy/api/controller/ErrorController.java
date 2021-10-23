@@ -23,21 +23,21 @@ public class ErrorController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleApiGenericErrors(Exception ex) {
-        ApiError apiError = errorService.createApiError(ex, ErrorCodes.UNKNOWN_ERROR_OCCURED, "Unknown error in application");
+        ApiError apiError = errorService.createApiError(ex, ErrorCodes.UNKNOWN_ERROR_OCCURED);
 
         return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(NoPortfolioException.class)
     public ResponseEntity<ApiError> handleNoPortfolioErrors(NoPortfolioException ex) {
-        ApiError apiError = errorService.createApiError(ex, ErrorCodes.PORTFOLIO_NOT_FOUND, "Portfolio with provided id does not exist.");
+        ApiError apiError = errorService.createApiError(ex, ErrorCodes.PORTFOLIO_NOT_FOUND);
 
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ExternalServiceException.class)
     public ResponseEntity<ApiError> handleExternalServiceErrors(ExternalServiceException ex) {
-        ApiError apiError = errorService.createApiError(ex, ErrorCodes.EXTERNAL_SERVICE_ERROR, "Error in attempting to connect with external price supplier.");
+        ApiError apiError = errorService.createApiError(ex, ErrorCodes.EXTERNAL_SERVICE_ERROR);
 
         return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -45,14 +45,14 @@ public class ErrorController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(DuplicateSymbolValidationException.class)
     public ResponseEntity<ApiError> handleDuplicateSymbolsInPortfolioErrors(DuplicateSymbolValidationException ex) {
         List<String> symbols = ex.getSymbols();
-        ApiError apiError = errorService.createApiError(ex, ErrorCodes.DUPLICATE_SYMBOLS_IN_REQUEST, "Duplicate symbols in request: " + symbols);
+        ApiError apiError = errorService.createApiError(ex, ErrorCodes.DUPLICATE_SYMBOLS_IN_REQUEST, symbols);
 
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(SymbolException.class)
     public ResponseEntity<ApiError> handleSymbolValidationErrors(SymbolException ex) {
-        ApiError apiError = errorService.createApiError(ex, ErrorCodes.SYMBOL_VALIDATION_ERROR, "Validation error found with symbols.");
+        ApiError apiError = errorService.createApiError(ex, ErrorCodes.SYMBOL_VALIDATION_ERROR);
 
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
@@ -60,7 +60,7 @@ public class ErrorController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidSymbolException.class)
     public ResponseEntity<ApiError> handleSymbolValidationErrors(InvalidSymbolException ex) {
         List<String> symbols = ex.getSymbols();
-        ApiError apiError = errorService.createApiError(ex, ErrorCodes.SYMBOL_VALIDATION_ERROR, "Invalid symbols in request: " + symbols);
+        ApiError apiError = errorService.createApiError(ex, ErrorCodes.INVALID_SYMBOL_ERROR, symbols);
 
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
