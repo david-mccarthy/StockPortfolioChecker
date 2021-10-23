@@ -4,8 +4,8 @@ import com.mccarthy.api.model.ApiError;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Service to handle generation of api errors.
@@ -13,9 +13,11 @@ import java.util.Locale;
 @Service
 public class ErrorService {
     private MessageSource errorMessageSource;
+    private HttpServletRequest request;
 
-    public ErrorService(MessageSource errorMessageSource) {
+    public ErrorService(MessageSource errorMessageSource, HttpServletRequest request) {
         this.errorMessageSource = errorMessageSource;
+        this.request = request;
     }
 
     /**
@@ -26,7 +28,7 @@ public class ErrorService {
      * @return Api error.
      */
     public ApiError createApiError(Exception exception, String errorCode) {
-        return createError(errorCode, errorMessageSource.getMessage(errorCode, new Object[]{}, Locale.ENGLISH), exception.getMessage());
+        return createError(errorCode, errorMessageSource.getMessage(errorCode, new Object[]{}, request.getLocale()), exception.getMessage());
     }
 
     private ApiError createError(String errorCode, String errorMessage, String exceptionMessage) {
@@ -40,7 +42,7 @@ public class ErrorService {
 
 
     public ApiError createApiError(Exception exception, String errorCode, List<String> args) {
-        return createError(errorCode, errorMessageSource.getMessage(errorCode, args.toArray(), Locale.ENGLISH), exception.getMessage());
+        return createError(errorCode, errorMessageSource.getMessage(errorCode, args.toArray(), request.getLocale()), exception.getMessage());
     }
 
 }
