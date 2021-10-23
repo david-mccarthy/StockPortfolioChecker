@@ -14,7 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class PortfolioManagerService {
@@ -25,7 +28,7 @@ public class PortfolioManagerService {
     protected final PriceCheckerService priceCheckerService;
     protected final SymbolValidationService symbolValidationService;
 
-    public PortfolioManagerService(DataAccessService dataAccessService, PortfolioValidationService portfolioValidationService,PriceCheckerService priceCheckerService, SymbolValidationService symbolValidationService) {
+    public PortfolioManagerService(DataAccessService dataAccessService, PortfolioValidationService portfolioValidationService, PriceCheckerService priceCheckerService, SymbolValidationService symbolValidationService) {
         this.dataAccessService = dataAccessService;
         this.portfolioValidationService = portfolioValidationService;
         this.priceCheckerService = priceCheckerService;
@@ -82,13 +85,15 @@ public class PortfolioManagerService {
         Portfolio portfolio = dataAccessService.getPortfolio(id);
         symbolValidationService.validatePortfolioDoesNotContainNewSymbols(id, input);
         symbolValidationService.validateSymbolExistsInExternalSystem(input);
-        for (AddItemInput.SymbolInput symbol : input.getSymbols()) {
-            Symbol newSymbol = new Symbol();
-            String name = symbol.getName();
-            newSymbol.setName(name);
-            newSymbol.setVolume(symbol.getVolume());
-            portfolio.addSymbol(newSymbol);
-        }
+        
+        input.getSymbols().stream().collect(Collectors.groupingBy(AddItemInput.SymbolInput::getName))
+                .forEach((key, value) -> {
+                    Symbol newSymbol = new Symbol();
+                    newSymbol.setName(key);
+                    newSymbol.setVolume(value.stream().map(AddItemInput.SymbolInput::getVolume).reduce(0, Integer::sum));
+                    portfolio.addSymbol(newSymbol);
+                });
+
         dataAccessService.savePortfolio(portfolio);
 
         return new ResponseEntity<>(HttpStatus.OK);
