@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.context.MessageSource;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
@@ -23,10 +24,13 @@ public class ErrorServiceTest {
 
     @Mock
     private MessageSource messageSource;
+    @Mock
+
+    private HttpServletRequest request;
 
     @Before
     public void setup() {
-        errorService = new ErrorService(messageSource);
+        errorService = new ErrorService(messageSource, request);
     }
 
     @Test
@@ -34,6 +38,7 @@ public class ErrorServiceTest {
         String exceptionMessage = "Exception to test";
         String errorCode = "001";
         String errorMessage = "Message";
+        when(request.getLocale()).thenReturn(Locale.ENGLISH);
         when(messageSource.getMessage(eq(errorCode), any(), any(Locale.class))).thenReturn(errorMessage);
         Exception e = new Exception(exceptionMessage);
         ApiError apiError = errorService.createApiError(e, errorCode);
